@@ -1,5 +1,6 @@
-if(process.env.NODE_ENV !="production"){
-require('dotenv').config();
+
+if (process.env.NODE_ENV !== "PRODUCTION") {
+  require("dotenv").config();
 }
 
 
@@ -46,10 +47,15 @@ app.engine('ejs', ejsMate);
 app.use(express.static(path.join(__dirname,"/public")));
 
 
+
 const store = MongoStore.create({
-    mongoUrl:dbUrl,
-    secret:process.env.SECRET,
-    touchAfter:24*3600,
+  mongoUrl: dburl,
+  // crypto: {
+  //   secret: process.env.SECRET,
+  // },
+  touchAfter: 24 * 3600,
+  autoRemove: "native",
+  autoRemoveInterval: 10
 });
 
 store.on("error",(err) => {
@@ -57,16 +63,19 @@ store.on("error",(err) => {
 });
 
 const sessionOptions = {
-    store,
-    secret : process.env.SECRET,
-    resave : false,
-    saveUninitialized : true,
-    cookie : {
-        expires : Date.now() +7 *24 * 60 * 60 *1000,
-        maxAge : 7 * 24 * 60 * 1000,
-        httpOnly : true,
-    },
+  store,
+  secret: process.env.SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    httpOnly: true,
+    sameSite: "lax",
+    expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+  },
 };
+
+ 
 
 // app.get("/",(req,res)=>{
 //     res.send("hii i am root");
