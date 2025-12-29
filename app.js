@@ -138,6 +138,6 @@ app.use((err , req, res, next) => {
    // res.status(statusCode).send(message);
 });
 
-app.listen(8080,()=>{
-    console.log("server is listen...8080");
+app.listen(dbUrl,()=>{
+    console.log("server is live");
 });
